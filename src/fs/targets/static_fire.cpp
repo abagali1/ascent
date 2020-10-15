@@ -47,13 +47,13 @@ void loop()
             if(inByte == NEWLINE){
                 float throttle = buf.toFloat();
                 if(throttle == 999){ // abort/stop 
-                    servo.writeMicroseconds(0);
+                    servo.writeMicroseconds(MIN_THROTTLE);
                     XBee.write("exited\n");
                     exited = true;
                     return;
                 }
                 servo.writeMicroseconds(throttle/100.0 * MAX_THROTTLE); // write value
-                XBee.write(String("wrote: " + String(throttle) + "\n").c_str());
+                XBee.write(String("wrote: " + String(throttle/100.0 * MAX_THROTTLE) + "\n").c_str());
                 buf = "";
                 Serial.println(throttle);
             }
