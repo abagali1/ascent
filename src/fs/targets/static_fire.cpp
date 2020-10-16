@@ -2,9 +2,10 @@
 #include <Servo.h>
 #include "SoftwareSerial.h"
 
-#define NEWLINE 13
 #define STOP 999
 #define ESC_PIN 9
+#define PERIOD 46
+#define NEWLINE 13
 #define MIN_THROTTLE 1000
 #define MAX_THROTTLE 2000
 
@@ -39,7 +40,7 @@ void loop()
     if(!exited){
         while (XBee.available() > 0) {
             byte inByte = XBee.read(); // reads into ascii decimal
-            if(inByte != NEWLINE && (inByte > 57 || inByte < 48)){ // not a number
+            if(inByte != NEWLINE && inByte != PERIOD && (inByte > 57 || inByte < 48)){ // not a number
                 buf = "";
                 continue;
             }
@@ -52,8 +53,8 @@ void loop()
                     exited = true;
                     return;
                 }
-                servo.writeMicroseconds(throttle/100.0 * MAX_THROTTLE); // write value
-                XBee.write(String("wrote: " + String(throttle/100.0 * MAX_THROTTLE) + "\n").c_str());
+                servo.writeMicroseconds((throttle/100.0 * MIN_THROTTLE)+MIN_THROTTLE); // write value
+                XBee.write(String("wrote: " + String((throttle/100.0 * MIN_THROTTLE)+MIN_THROTTLE) + "\n").c_str());
                 buf = "";
                 Serial.println(throttle);
             }
