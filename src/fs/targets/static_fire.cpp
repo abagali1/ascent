@@ -3,8 +3,8 @@
 #include "SoftwareSerial.h"
 
 #define STOP 999
-#define ESC_PIN 9
 #define PERIOD 46
+#define ESC_PIN 9
 #define NEWLINE 13
 #define MIN_THROTTLE 1000
 #define MAX_THROTTLE 2000
@@ -53,12 +53,13 @@ void loop()
                     exited = true;
                     return;
                 }
-                servo.writeMicroseconds((throttle/100.0 * MIN_THROTTLE)+MIN_THROTTLE); // write value
-                XBee.write(String("wrote: " + String((throttle/100.0 * MIN_THROTTLE)+MIN_THROTTLE) + "\n").c_str());
+                throttle = (throttle/100.0 * (MAX_THROTTLE-MIN_THROTTLE))+MIN_THROTTLE;
+                servo.writeMicroseconds(throttle); // write value
+                XBee.write(String("wrote: " + String(throttle) + "\n").c_str());
                 buf = "";
                 Serial.println(throttle);
             }
         }
-        delay(500);
+        delay(100);
     }
 }
