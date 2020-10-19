@@ -15,22 +15,14 @@ bool exited = false;
 Servo servo;
 SoftwareSerial XBee(2, 3);
 
-void arm(){
-    servo.writeMicroseconds(0);
-    delay(3000);
-    servo.writeMicroseconds(MAX_THROTTLE);
-    delay(3000);
-    servo.writeMicroseconds(MIN_THROTTLE);
-    delay(5000);
-}
-
 void setup()
 {
-    servo.attach(ESC_PIN);
-    delay(1000);
-    arm();
+    servo.attach(ESC_PIN,1000,2000);
+    servo.writeMicroseconds(0);
+    delay(2000);
 
     XBee.begin(9600);
+    XBee.write("teensy started\n");
     Serial.begin(15200);
     Serial.println("teensy started");
 }
@@ -53,7 +45,6 @@ void loop()
                     exited = true;
                     return;
                 }
-                throttle = (throttle/100.0 * (MAX_THROTTLE-MIN_THROTTLE))+MIN_THROTTLE;
                 servo.writeMicroseconds(throttle); // write value
                 XBee.write(String("wrote: " + String(throttle) + "\n").c_str());
                 buf = "";
