@@ -1,6 +1,6 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
-#include "Adafruit_BMP3XX.h"
+#include <Adafruit_BMP3XX.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
   
@@ -15,7 +15,7 @@ void setup() {
   while (!Serial);
   
   Serial.println("BMP388 test");
-  if (!bmp.begin()) {
+  if (!bmp.begin_I2C()) {
     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
     while (1);
   }

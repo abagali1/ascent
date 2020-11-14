@@ -1,12 +1,3 @@
-[submodule "lib/common/Adafruit_BMP3XX"]
-	path = lib/common/Adafruit_BMP3XX
-	url = https://github.com/adafruit/Adafruit_BMP3XX
-[submodule "lib/common/Adafruit_BNO055"]
-	path = lib/common/Adafruit_BNO055
-	url = https://github.com/adafruit/Adafruit_BNO055
 [submodule "lib/common/i2c_t3"]
 	path = lib/common/i2c_t3
 	url = https://github.com/nox771/i2c_t3
-[submodule "lib/common/Adafruit_Sensor"]
-	path = lib/common/Adafruit_Sensor
-	url = https://github.com/adafruit/Adafruit_Sensor
