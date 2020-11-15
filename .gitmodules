@@ -1,3 +1,0 @@
-[submodule "lib/common/i2c_t3"]
-	path = lib/common/i2c_t3
-	url = https://github.com/nox771/i2c_t3

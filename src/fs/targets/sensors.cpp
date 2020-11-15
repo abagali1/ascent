@@ -1,4 +1,4 @@
-#include <Wire.h>
+#include <i2c_t3.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP3XX.h>
 #include <Adafruit_BNO055.h>
