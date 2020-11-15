@@ -1,0 +1,12 @@
+[submodule "lib/common/i2c_t3"]
+	path = lib/common/i2c_t3
+	url = https://github.com/nox771/i2c_t3
+[submodule "lib/common/Adafruit_BNO055"]
+	path = lib/common/Adafruit_BNO055
+	url = https://github.com/abagali1/Adafruit_BNO055.git
+[submodule "lib/common/Adafruit_BusIO"]
+	path = lib/common/Adafruit_BusIO
+	url = https://github.com/abagali1/Adafruit_BusIO.git
+[submodule "lib/common/Adafruit_BMP3XX"]
+	path = lib/common/Adafruit_BMP3XX
+	url = https://github.com/abagali1/Adafruit_BMP3XX.git
