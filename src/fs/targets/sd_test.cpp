@@ -5,7 +5,7 @@
 #include <SD.h>
 #include <Adafruit_BNO055.h>
 
-#define MAX 1e5
+#define MAX 1e3
 
 File fout;
 Adafruit_BNO055 bno;
@@ -22,7 +22,7 @@ void setup(){
     }
     Serial.println("init success");
 
-    fout = SD.open("data.txt", FILE_WRITE);
+    fout = SD.open("test.txt", FILE_WRITE);
     if(fout){
         Serial.println("write test");
         fout.println("test write");
@@ -47,12 +47,14 @@ void setup(){
 
 void loop(){
     imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-    fout.printf("%e %e %e", imu_acc_reading.x(), imu_acc_reading.y(), imu_acc_reading.z());
+    fout.printf("%e %e %e\n", imu_acc_reading.x(), imu_acc_reading.y(), imu_acc_reading.z());
     if(i > MAX){
         Serial.println("test finished");
         fout.close();
         while(true){}
     }
+    if(!(i % 100))
+        Serial.println(i);
     i++;
     delay(100);
 }
