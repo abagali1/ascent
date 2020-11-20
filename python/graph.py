@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('data.txt', delimiter=' ', header=None, index_col=None)
+data = pd.read_csv('data/linaccel.txt', delimiter=' ', header=None, index_col=None)
 
 x, y, z = data.T.values
 print(np.std(x), np.std(z))
