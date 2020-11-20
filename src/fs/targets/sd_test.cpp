@@ -5,7 +5,7 @@
 #include <SD.h>
 #include <Adafruit_BNO055.h>
 
-#define MAX 1e20
+#define MAX 1e5
 
 File fout;
 Adafruit_BNO055 bno;
