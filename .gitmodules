@@ -10,3 +10,6 @@
 [submodule "lib/common/Adafruit_BMP3XX"]
 	path = lib/common/Adafruit_BMP3XX
 	url = https://github.com/abagali1/Adafruit_BMP3XX.git
+[submodule "lib/common/SdFat-beta"]
+	path = lib/common/SdFat-beta
+	url = https://github.com/greiman/SdFat-beta

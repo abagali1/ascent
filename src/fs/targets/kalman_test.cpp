@@ -39,10 +39,6 @@ void setup() {
 
 void loop() {
   imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-  if (! bmp.performReading()) {
-    Serial.println("Failed to perform reading :(");
-    return;
-  }
 
   double clock_time = millis();
   double u = imu_acc_reading.x();
