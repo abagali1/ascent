@@ -4,9 +4,10 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <MatrixMath.h>
+#include <Gaussian.h>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-
+const float pi = 3.14159265;
 Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 double previous_clock_time;
@@ -15,9 +16,13 @@ mtx_type F[2][2] = {{1, dt}, {0, 1}}
 mtx_type x[2][1] = {{0}, {0}};
 mtx_type B[2][2] = {{0.5*dt*dt, 0}, {0, dt}}
 mtx_type u[2][1] = {{0}, {0}} //0s for initialization?
-
 mtx_type FT[2][2];
 Matrix.Transpose((mtx_type*)F, 2, 2, FT)
+double x_var = 0;
+double vx_var = 0;
+mtx_type P[2][2] = {{x_var, 0}, {0, vx_var}}
+double Q_var = 2.35; //Process Noise Variance
+Gaussian Q = Gaussian(0, Q_var)
 
 void setup() {
   Wire.begin(); 
@@ -69,4 +74,15 @@ void loop() {
   x[1][0] = x_bar[1][0];
   previous_clock_time = clock_time;
 //   delay(1000);
+}
+
+void process_noise(double mean, double variance){
+  double [2][2] to_return;
+  for(int i = 0; i<2; i++){
+    for(int j = 0; j<2; j++){
+      double x = random(0, 999)/1000*random(-3*variance, 3*variance)
+      to_return [i][j] = (1/sqrt(2*variance*pi))*(exp((-1*pow(x-mean, 2))/(2*variance))) 
+    }
+  }
+  return to_return
 }
