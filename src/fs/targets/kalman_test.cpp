@@ -12,14 +12,11 @@ Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 double previous_clock_time;
 double dt = 1 / 100;
-double x_var = 0;
-double vx_var = 0;
-double Q_var = 2.35;
+
 float z_o = 0;
 lin::Vector2d x = {0.0, 0.0};
 lin::Matrix2x2d P = {0.2, 0.0, 1.2, 0.0};
-lin::Matrix2x2d Q = {0.001, 0.1, 0.1, 0.001};
-
+lin:Matrixd<1,1> R = {4};
 
 void setup() {
   Wire.begin(); 
@@ -53,23 +50,23 @@ void setup() {
 
 void loop() {
   imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-  float z = bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o;
-
+  lin::Matrixd<1,1> z = {bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o};
   double clock_time = millis();
-  float dt = 1e-2;
+
   lin::Matrix2x2d F = {1.0, dt, 0.0, 1.0};
   lin::Vector2d B = {0.5*dt*dt, dt};
+  lin::Matrix2x2d Q = {0.001, 0.1, 0.1, 0.001};
+
 
   lin::Vector2d x_bar = F*x + B*imu_acc_reading.z();
   P = F*P*lin::transpose(F) + Q;
   lin::Matrixd<1,2> H = {1.0, 0.0};
-  
-  lin::Matrixd<1,2> y 
+  lin::Matrixd<1,2> y = z - H * x_bar
+  S = H * P * lin::transpose(H) + R
+  K = P * lin::transpose(H) * lin::inv(S)
+  P = P - K * H * P
+  x = x_bar + K * y
 
-
-
-
-  // delay((period * 1000) - clock_time - previous_clock_time);
-  previous_clock_time = clock_time;
-//   delay(1000);
+  delay((period * 1000) - clock_time - previous_clock_time);
+  previous_clock_time = clock_time;;
 }
