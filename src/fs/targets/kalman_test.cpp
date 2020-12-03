@@ -62,7 +62,9 @@ void loop() {
 
   lin::Vector2d x_bar = F*x + B*imu_acc_reading.z();
   P = F*P*lin::transpose(F) + Q;
-  lin::Vector2d H = {1.0, 0.0};
+  lin::Matrixd<1,2> H = {1.0, 0.0};
+  
+  lin::Matrixd<1,2> y 
 
 
 
