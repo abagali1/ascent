@@ -4,8 +4,9 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <lin/core.hpp>
-
+#include <SD.h>
 #define SEALEVELPRESSURE_HPA (1013.25)
+const int chipSelect = BUILTIN_SDCARD;
 
 const float pi = 3.14159265;
 Adafruit_BMP3XX bmp;
@@ -23,6 +24,22 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
   
+  if(!SD.begin(chipSelect)){
+        Serial.println("init fail");
+        while(true){}
+  }
+  fout = SD.open("test.txt", FILE_WRITE);
+  if(fout){
+        Serial.println("write test");
+        fout.println("test write");
+        fout.close();
+        Serial.println("write test success");
+    }else{
+        Serial.println("Fail to open test.txt");
+        while(true) {}
+    }
+  fout = SD.open("data.txt", FILE_WRITE);
+
   // Initialize BMP
   if (!bmp.begin_I2C()) {
     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
@@ -51,6 +68,7 @@ void setup() {
 void loop() {
   imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
   lin::Matrixd<1,1> z = {bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o};
+  float u = imu_acc_reading.z();
   double clock_time = millis();
 
   lin::Matrix2x2d F = {1.0, dt, 0.0, 1.0};
@@ -58,7 +76,7 @@ void loop() {
   lin::Matrix2x2d Q = {0.001, 0.1, 0.1, 0.001};
 
 
-  lin::Vector2d x_bar = F*x + B*imu_acc_reading.z();
+  lin::Vector2d x_bar = F*x + B*u;
   P = F*P*lin::transpose(F) + Q;
   lin::Matrixd<1,2> H = {1.0, 0.0};
   lin::Matrixd<1,2> y = z - H * x_bar
@@ -66,6 +84,7 @@ void loop() {
   K = P * lin::transpose(H) * lin::inv(S)
   P = P - K * H * P
   x = x_bar + K * y
+  fout.printf("%0.3e,%0.3e,%0.3e,%0.3e,\n", clock_time, clock_time - millis(), z[0], u, x_bar[0], x_bar[1]); // clock_time, loop_time, measurement, x, vx
 
   delay((period * 1000) - clock_time - previous_clock_time);
   previous_clock_time = clock_time;;
