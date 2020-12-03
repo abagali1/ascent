@@ -13,3 +13,6 @@
 [submodule "lib/common/SdFat-beta"]
 	path = lib/common/SdFat-beta
 	url = https://github.com/greiman/SdFat-beta
+[submodule "lib/common/MatrixMath"]
+	path = lib/common/MatrixMath
+	url = https://github.com/eecharlie/MatrixMath

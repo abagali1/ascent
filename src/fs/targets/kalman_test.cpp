@@ -7,6 +7,7 @@
 #include <Gaussian.h>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
+
 const float pi = 3.14159265;
 Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
@@ -22,6 +23,7 @@ double x_var = 0;
 double vx_var = 0;
 mtx_type P[2][2] = {{x_var, 0}, {0, vx_var}};
 double Q_var = 2.35;
+float z_o = 0;
 
 
 void setup() {
@@ -48,47 +50,38 @@ void setup() {
   delay(1000);
   bno.setExtCrystalUse(true);
   previous_clock_time = millis();
+  for(int i=0;i<5;i++){
+    z_o += bmp.readAltitude(SEALEVELPRESSURE_HPA);
+  }
+  z_o /= 5;
 }
 
 void loop() {
   imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-  double pressure = bmp.pressure / 100.0;
+  float z = bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o;
 
   double clock_time = millis();
 
-  double u = imu_acc_reading.x();
-  double Bu[2][1] = {{0.5 * dt * dt * u}, 
-                    {dt * u}};
-  double Fx[2][1] = {{1 * x[0][0] + dt * x[1][0]},
-                     {x[1][0]}};
 
-  double x_bar[2][1] = {{Fx[0][0] + Bu[0][0]}, 
-                        {Fx[1][0] + Bu[1][0]}};
-
-  Serial.println("X" + String(x_bar[0][0]));
-  Serial.println("U" + String(u));
-//   Serial.println(String(imu_acc_reading.x()) + ";" + String(imu_acc_reading.y()) + ";" + String(imu_acc_reading.z()));
 
   delay((period * 1000) - clock_time - previous_clock_time);
-  x[0][0] = x_bar[0][0];
-  x[1][0] = x_bar[1][0];
   previous_clock_time = clock_time;
 //   delay(1000);
 }
 
 mtx_type kalman_predict(){
   mtx_type Fx;
-  Matrix.Multiply((mtx_type*)F, (mtx_type*)x, 2, 2, 1, Fx);
+  Matrix.Multiply(&F, &x, 2, 2, 1, Fx);
   mtx_type Bu;
-  Matrix.Multiply((mtx_type*)B, (mtx_type*)u, 2, 2, 1, Bu);
+  Matrix.Multiply(&B, &u, 2, 2, 1, Bu);
   mtx_type prior;
-  Matrix.Add((mtx_type*)Fx, (mtx_type*)Bu, 2, 1, prior);
+  Matrix.Add(&Fx, &Bu, 2, 1, prior);
   
   mtx_type FP;
-  Matrix.Multiply((mtx_type*)F, (mtx_type*)P, 2, 2, 2, FP);
+  Matrix.Multiply(&F, &P, 2, 2, 2, FP);
   mtx_type FPFT;
-  Matrix.Multiply((mtx_type*)FP, (mtx_type*)FT, 2, 2, 2, FPFT);
-  Matrix.Add((mtx_type*)FPFT, (mtx_type*)Q, 2, 2, P);
+  Matrix.Multiply(&FP, &FT, 2, 2, 2, FPFT);
+  Matrix.Add(&FPFT, &Q, 2, 2, P);
   return prior;
 }
 void process_noise(double mean, double variance){
