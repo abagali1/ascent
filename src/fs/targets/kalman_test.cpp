@@ -12,7 +12,7 @@ const float pi = 3.14159265;
 Adafruit_BMP3XX bmp;
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 double previous_clock_time;
-float dt = 1 / 100;
+float dt = 1.0/100.0;
 File fout;
 
 float z_o = 0;
