@@ -1,3 +1,5 @@
 .pio
 .vscode/
 .ipynb_checkpoints/
+.clang_complete
+.gcc-flags.json

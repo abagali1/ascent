@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include <vector>
+#include <string>
 
 void receiveEvent(int);
 

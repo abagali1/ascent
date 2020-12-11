@@ -3,6 +3,8 @@
 #include <Adafruit_BMP3XX.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+#include <string>
+#include <unordered_map>
   
 #define SEALEVELPRESSURE_HPA (1013.25)
 
@@ -10,6 +12,7 @@ Adafruit_BMP3XX bmp; // I2C
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 void setup() {
+  std::string a;
   Wire.begin(); 
   Serial.begin(9600);
   while (!Serial);
