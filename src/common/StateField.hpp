@@ -7,7 +7,7 @@ class StateFieldBase{
         virtual ~StateFieldBase(){};
 };
 
-template<typename T, bool gw, bool gr>
+template<typename T>
 class StateField : public virtual StateFieldBase {
     protected:
         std::string name;
@@ -16,7 +16,7 @@ class StateField : public virtual StateFieldBase {
         bool ground_writeable;
 
     public:
-        StateField(const std::string name)
+        StateField(const std::string name, const bool gr, const bool gw)
             : StateFieldBase(),
               name(name),
               value(),
