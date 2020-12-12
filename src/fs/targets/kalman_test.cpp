@@ -6,6 +6,7 @@
 #include <lin/core.hpp>
 #include <SD.h>
 #define SEALEVELPRESSURE_HPA (1013.25)
+#define MAX 1000
 const int chipSelect = BUILTIN_SDCARD;
 
 const float pi = 3.14159265;
@@ -15,6 +16,7 @@ double previous_clock_time;
 float dt = 1.0/100.0;
 File fout;
 
+int i = 0;
 float z_o = 0;
 lin::Vector2d x = {0.0, 0.0};
 lin::Matrix2x2d P = {0.2, 0.0, 1.2, 0.0};
@@ -39,42 +41,47 @@ void setup() {
         Serial.println("Fail to open test.txt");
         while(true) {}
     }
-  fout = SD.open("data.txt", FILE_WRITE);
 
   // Initialize BMP
+  Serial.println("bmp read");
   if (!bmp.begin_I2C()) {
     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
     while (1);
   }
+  Serial.println("fin bmp");
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
   // Initialize IMU
+  Serial.println("bno read");
   if(!bno.begin())
   { 
     Serial.print("Could not find a valid BNO05 IMU, check wiring!");
     while(1);
   }
+
   delay(1000);
+  Serial.println("initial reading");
+  bmp.readAltitude(SEALEVELPRESSURE_HPA);
+  Serial.println("reading");
+  fout = SD.open("init.txt", FILE_WRITE);
+  for(int j=0;j<1000;j++){
+    float z = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+    z_o += z;
+    fout.println(z);
+    if(j % 100 == 1){
+      Serial.println(j);
+    }
+  }
+  z_o /= 1000;
+  fout.close();
+  fout = SD.open("data.txt", FILE_WRITE);
   bno.setExtCrystalUse(true);
   previous_clock_time = millis();
-  for(int i=0;i<5;i++){
-    z_o += bmp.readAltitude(SEALEVELPRESSURE_HPA);
-  }
-  z_o /= 5;
-}
-
-lin::Matrix2x2d inv(lin::Matrix2x2d &A) {
-    double a = A(0);
-    double b = A(1);
-    double c = A(2);
-    double d = A(3);
-
-    double det=a*d-b*c;
-    lin::Matrix2x2d res = {d/det, -b/det, -c/det, a/det};
-    return res;
+  Serial.println("init successsss");
+  delay(1000);
 }
 
 void loop() {
@@ -82,10 +89,15 @@ void loop() {
   float z = bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o;
   float u = imu_acc_reading.z();
   float clock_time = millis();
-
-  Serial.println(dt);
   fout.printf("0,%e,%e\n", u, z); // dt, az, z
 
   delay((dt * 1000) - (clock_time - previous_clock_time));
-  previous_clock_time = clock_time;;
+  previous_clock_time = clock_time;
+  Serial.println(i);
+  if(i >= MAX){
+    fout.close();
+    Serial.println("test finished");
+    while(true){}
+  }
+  i++;
 }
