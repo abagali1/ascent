@@ -5,6 +5,8 @@
 #include <utility/imumaths.h>
 #include <lin/core.hpp>
 #include <SD.h>
+#include <matrix.hpp>
+
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define MAX 1000
 const int chipSelect = BUILTIN_SDCARD;
