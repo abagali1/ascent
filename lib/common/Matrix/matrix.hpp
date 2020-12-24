@@ -9,6 +9,7 @@ class Matrix {
 
         Matrix(int r, int c);
         void fill(std::vector<float> data);
+        float at(int r, int c);
 
         Matrix operator * (const Matrix& matrix2) const;
         Matrix operator + (const Matrix& matrix2) const;
