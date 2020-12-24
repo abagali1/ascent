@@ -18,7 +18,7 @@ void loop(){
     Serial.println(r.matrixData.at(0));
     Serial.println(r.matrixData.at(1));
     Serial.println();
-    r = F * x;
+    r = f * x;
     Serial.println(r.matrixData.at(0));
     Serial.println(r.matrixData.at(1));
     Serial.println("----------");
