@@ -3,3 +3,5 @@
 .ipynb_checkpoints/
 .clang_complete
 .gcc-flags.json
+lib/common/Matrix/a.out
+lib/common/Matrix/test.cpp
