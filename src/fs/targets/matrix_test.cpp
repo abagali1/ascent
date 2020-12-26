@@ -10,7 +10,9 @@ void setup(){
     Serial.begin(9600);
     x.fill(std::vector<float>({1, 2}));
     b.fill(std::vector<float>({3, 4}));
-    // F.fill(std::vector<float>({1, 0, 0, 1}));
+    f.fill(std::vector<float>({1, 0, 0, 1}));
+    Serial.println("inited");
+    delay(1000);
 }
 
 void loop(){
