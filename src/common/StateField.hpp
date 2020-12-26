@@ -8,6 +8,7 @@ class StateFieldBase{
         virtual const std::string& get_name() const = 0;
         virtual const bool is_readable() const = 0;
         virtual const bool is_writeable() const = 0;
+        virtual ~StateFieldBase() = default;
 };
 
 template<typename T>
