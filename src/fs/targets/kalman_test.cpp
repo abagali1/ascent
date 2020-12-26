@@ -94,7 +94,7 @@ void setup() {
   Q.fill(std::vector<float>({0.001, 0.1, 0.1, 0.001}));
   R.fill(std::vector<float>({4.0}));
   f.fill(std::vector<float>({1, dt, 0, 1}));
-  B.fill(std::vector<float>({0.5 * dt * dt, dt}));
+  B.fill(std::vector<float>({0.5f * dt * dt, dt}));
   H.fill(std::vector<float>({1,0}));
 
   pinMode(1, OUTPUT);
@@ -110,24 +110,35 @@ void setup() {
   digitalWrite(1, LOW);
 
   previous_clock_time = millis();
+  Serial.println("done");
 }
 
 void loop() {
   imu::Vector<3> imu_acc_reading = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
   float u = imu_acc_reading.z();
   float clock_time = millis();
+  Serial.println("read imu");
 
   Matrix z(1,1);
   z.fill(std::vector<float>({bmp.readAltitude(SEALEVELPRESSURE_HPA) - z_o}));
+  Serial.println("z");
 
   Matrix x_bar = (f * x) + (B * u);
+  Serial.println("x_bar");
   Matrix P_bar = ((f * P) * f.transpose()) + Q;
+  Serial.println("p_bar");
 
   Matrix y = z - (H * x_bar);
+  Matrix T = H * P_bar;
+  Serial.println("y");
   Matrix S = (H * P_bar * H.transpose()) + R;
+  Serial.println("S");
   Matrix K = P_bar * H.transpose() * S.inverse();
+  Serial.println("K");
   P = P_bar - (K * H * P_bar);
+  Serial.println("updated P");
   x = x_bar + K * y;
+  Serial.println("updated x");
 
   Serial.println(x.at(0,0));
 
