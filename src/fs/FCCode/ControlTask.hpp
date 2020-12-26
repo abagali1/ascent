@@ -2,10 +2,12 @@
 #define _CT_HPP
 
 #include <string>
+#include <cassert>
 
 #include <Arduino.h>
 
 #include <common/StateField.hpp>
+#include <common/debug_console.hpp>
 #include <common/StateFieldRegistry.hpp>
 
 
@@ -18,6 +20,24 @@ class ControlTask{
         ControlTask(StateFieldRegistry& r): _registry(r) {};
         virtual void execute() = 0;
         virtual ~ControlTask() = 0;
+
+        void field_exists(StateFieldBase* s, const std::string& type, const std::string& name){
+            if(!s){
+                #ifndef FLIGHT
+                debug::printf(debug::ERROR, "%s state field %s is not in registry", type.c_str(), name.c_str());
+                #endif
+                assert(false);
+            }
+        }
+
+        void field_added(const bool added, const std::string& type, const std::string& name){
+            if(!added){
+                #ifndef FLIGHT
+                debug::printf(debug::ERROR, "%s state field %s is already in registry", type.c_str(), name.c_str());
+                #endif
+                assert(false);
+            }
+        }
 
         template<class T>
         void add_readable_field(ReadableStateField<T>& field){
@@ -41,7 +61,6 @@ class ControlTask{
             return static_cast<WriteableStateField<T>*>(ptr);
         }
 
-
-}
+};
 
 #endif
