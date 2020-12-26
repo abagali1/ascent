@@ -91,10 +91,16 @@ Matrix Matrix::operator * (const Matrix& matrix2) const {
     assert(this->columns == matrix2.rows);
 
     Matrix r = Matrix(this->rows, matrix2.columns);
-    if (r.rows == 2 && r.columns == 1) {
+    if (r.rows == 2 && r.columns == 1 && matrix2.rows != 1) {
         std::vector<float> data {
             at(0, 0) * matrix2.at(0, 0) + at(0, 1) * matrix2.at(0, 1),
             at(1, 0) * matrix2.at(0, 0) + at(1, 1) * matrix2.at(0, 1) 
+        };
+        r.fill(data);
+    } else if(r.rows == 2 && r.columns == 1) {
+        std::vector<float> data {
+            at(0, 0) * matrix2.at(0, 0),
+            at(0, 1) * matrix2.at(0, 0)
         };
         r.fill(data);
     } else if (r.rows == 2 && r.columns == 2) {
@@ -113,6 +119,12 @@ Matrix Matrix::operator * (const Matrix& matrix2) const {
     } else if (r.rows == 1 && r.columns == 1) {
         std::vector<float> data {
             at(0,0) * matrix2.at(0,0)
+        };
+        r.fill(data);
+    } else if (r.rows == 1 && r.columns == 2) {
+        std::vector<float> data {
+            at(0,0) * matrix2.at(0, 0) + at(0, 1) * matrix2.at(0, 1),
+            at(0,0) * matrix2.at(1, 0) + at(0, 1) * matrix2.at(1, 1),
         };
         r.fill(data);
     } else {
