@@ -4,8 +4,9 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <string>
-#include <unordered_map>
-  
+
+ #include <common/StateFieldRegistry.hpp>
+
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 Adafruit_BMP3XX bmp; // I2C
@@ -36,7 +37,7 @@ void setup() {
   bno.setExtCrystalUse(true);
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
-  Serial.println("teensy started"); 
+  Serial.println("teensy started");
 }
 
 void loop() {
