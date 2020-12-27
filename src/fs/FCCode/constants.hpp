@@ -14,6 +14,9 @@ namespace ASCENT{
 namespace DEVICES{
     // Hardware pinouts, Serial monitor vs XBee Serial, Motor pins, etc.
     // Maybe sub namespace for Motors
+    constexpr uint bno055_offset = 1;
+    constexpr int bno055_id = 55;
+    constexpr int bno055_address = 0x28;
 }
 
 namespace MANAGER{

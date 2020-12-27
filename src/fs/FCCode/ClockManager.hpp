@@ -2,7 +2,6 @@
 #define _CLOCK_MANAGER_HPP
 
 #include <common/TimedControlTask.hpp>
-#include <common/StateFieldRegistry.hpp>
 
 class ClockManager: public TimedControlTask{
     private:
