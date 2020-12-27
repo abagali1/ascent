@@ -87,10 +87,6 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
             return this->execute();
         }
 
-        void execute(){
-            debug::println(debug::DEBUG, "executed");
-        }
-
         void sleep_until_time(system_time_t time){
             const signed int dt = static_cast<signed int>(system_duration_to_microseconds(time - get_current_system_time()));
             unsigned int wait_time = dt;
