@@ -4,7 +4,11 @@
 #include <common/ControlTask.hpp>
 #include <common/StateFieldRegistry.hpp>
 
+#include "ClockManager.hpp"
+
 class MainControlLoop: public ControlTask{
+    protected:
+        ClockManager clock_manager;
     public:
         MainControlLoop(StateFieldRegistry& registry);
         void execute();

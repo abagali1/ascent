@@ -14,15 +14,15 @@ typedef std::chrono::steady_clock::duration system_duration_t;
 #else
 #include <Arduino.h>
 
-typedef unsigned int system_time_t;
-typedef unsigned int system_duration_t;
+typedef uint system_time_t;
+typedef uint system_duration_t;
 #endif
 
 
 class TimedControlTaskBase{
     protected:
         static system_time_t current_cycle_start_time;
-        static unsigned int control_cycle_count;
+        static uint control_cycle_count;
     public:
         static system_time_t get_current_system_time(){
             #ifdef DESKTOP
@@ -32,7 +32,7 @@ class TimedControlTaskBase{
             #endif
         }
 
-        static unsigned int system_duration_to_microseconds(const system_duration_t& time){
+        static uint system_duration_to_microseconds(const system_duration_t& time){
             #ifdef DESKTOP
             return std::chrono::duration_cast<std::chrono::microseconds>(time).count();
             #else
@@ -40,7 +40,7 @@ class TimedControlTaskBase{
             #endif
         }
 
-        static system_duration_t microseconds_to_duration(const unsigned int& time){
+        static system_duration_t microseconds_to_duration(const uint& time){
             #ifdef DESKTOP
             return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::microseconds(time));
             #else
@@ -48,7 +48,7 @@ class TimedControlTaskBase{
             #endif
         }
 
-        static void sleep_for_duration(const unsigned int& time){
+        static void sleep_for_duration(const uint& time){
             const system_time_t start_time = get_current_system_time();
             while(system_duration_to_microseconds(get_current_system_time() - start_time) < time){
                 #ifdef DESKTOP
@@ -66,11 +66,11 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
         const std::string& _name;
         const system_duration_t _offset;
 
-        ReadableStateField<unsigned int> num_late_f;
+        ReadableStateField<uint> num_late_f;
         ReadableStateField<float> avg_wait_f;
 
     public:
-        TimedControlTask(StateFieldRegistry& registry, const std::string& n, unsigned int offset)
+        TimedControlTask(StateFieldRegistry& registry, const std::string& n, uint offset)
             :   ControlTask(registry),
                 _name(n),
                 _offset(offset),
@@ -89,7 +89,7 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
 
         void sleep_until_time(system_time_t time){
             const signed int dt = static_cast<signed int>(system_duration_to_microseconds(time - get_current_system_time()));
-            unsigned int wait_time = dt;
+            uint wait_time = dt;
             if (dt <= 0){
                 this->num_late_f.set_value(this->num_late_f.get_value() + 1);
                 wait_time = 0;

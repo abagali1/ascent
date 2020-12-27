@@ -5,6 +5,10 @@
 
 namespace ASCENT{
     // Global Constants, MCL Loop timing etc.
+    constexpr uint control_cycle_time_s = 0.1;
+    constexpr uint control_cycle_time_ms = control_cycle_time_s * 1000;
+    constexpr uint control_cycle_time_us = control_cycle_time_ms * 1000;
+    constexpr uint control_cycle_time = control_cycle_time_us;
 }
 
 namespace DEVICES{
