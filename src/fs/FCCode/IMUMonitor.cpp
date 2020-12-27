@@ -46,14 +46,6 @@ IMUMonitor::IMUMonitor(StateFieldRegistry& registry, uint offset, uint id, int a
     this->bno055.setAxisSign(Adafruit_BNO055::adafruit_bno055_axis_remap_sign_t::REMAP_SIGN_P1);
     this->bno055.setMode(Adafruit_BNO055::adafruit_bno055_opmode_t::OPERATION_MODE_NDOF);
     this->bno055.setExtCrystalUse(true);
-
-    // Init with calibration data to enter into MM::Calibrate mode
-    unsigned char sys_c, gyro_c, accel_c, mag_c;
-    this->bno055.getCalibration(&sys_c, &gyro_c, &accel_c, &mag_c);
-    this->system_cal_f.set_value(sys_c);
-    this->gyro_cal_f.set_value(gyro_c);
-    this->accel_cal_f.set_value(accel_c);
-    this->mag_cal_f.set_value(mag_c);
 }
 
 void IMUMonitor::execute(){
@@ -87,7 +79,6 @@ void IMUMonitor::execute(){
     this->bno055.getEvent(&mag_v, Adafruit_BNO055::VECTOR_MAGNETOMETER);
     temp = this->bno055.getTemp();
     quat = this->bno055.getQuat(); // Read Quaternion Orientation
-
 
     
     this->lin_accel_f.set_value({
