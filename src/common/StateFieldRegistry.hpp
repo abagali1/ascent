@@ -25,10 +25,6 @@ class StateFieldRegistry{
 
     public:
         StateFieldRegistry() = default;
-
-
-
-
 };
 
 #endif

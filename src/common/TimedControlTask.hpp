@@ -73,9 +73,9 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
         TimedControlTask(StateFieldRegistry& registry, const std::string& n, unsigned int offset)
             :   ControlTask(registry),
                 _name(n),
+                _offset(offset),
                 num_late_f("tct."+n+".num_late"),
-                avg_wait_f("tct."+n+".avg_wait"),
-                _offset(offset)
+                avg_wait_f("tct."+n+".avg_wait")
         {
             this->add_readable_field(this->num_late_f);
             this->add_readable_field(this->avg_wait_f);
@@ -87,7 +87,9 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
             return this->execute();
         }
 
-        void execute(){}
+        void execute(){
+            debug::println(debug::DEBUG, "executed");
+        }
 
         void sleep_until_time(system_time_t time){
             const signed int dt = static_cast<signed int>(system_duration_to_microseconds(time - get_current_system_time()));
@@ -106,8 +108,9 @@ class TimedControlTask: public ControlTask, public TimedControlTaskBase{
             
         }
 
-
-
+        const std::string& get_name() const{
+            return this->_name;
+        }
 };
 
 #endif

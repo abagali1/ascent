@@ -26,9 +26,9 @@ void printf(SEVERITY s, const char* format, ...){
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args);
     #ifdef DESKTOP
-        std::cout << SEVERITY_STRING[s] << buf << std::endl;
+        std::cout << SEVERITY_STRING[s] << buf;
     #else
-        Serial.println(buf);
+        Serial.print(buf);
     #endif
     va_end(args);
 }
