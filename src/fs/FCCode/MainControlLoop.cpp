@@ -2,8 +2,10 @@
 #include "constants.hpp"
 
 MainControlLoop::MainControlLoop(StateFieldRegistry& registry)
-    : ControlTask(registry) {}
+    : ControlTask(registry) {
+        delay(1000);
+    }
 
-void execute(){
-    debug::println(debug::DEBUG, "mcl execute");
+void MainControlLoop::execute(){
+    debug::println(debug::DEBUG, "execute");
 }

@@ -16,7 +16,7 @@ class ControlTask{
     public:
         ControlTask(StateFieldRegistry& r): _registry(r) {};
         virtual void execute() = 0;
-        virtual ~ControlTask() = default;
+        virtual ~ControlTask() {};
 
         void field_exists(StateFieldBase* s, const std::string& type, const std::string& name){
             if(!s){
