@@ -10,8 +10,8 @@ class MainControlLoop: public ControlTask{
     protected:
         ClockManager clock_manager;
     public:
-        MainControlLoop(StateFieldRegistry& registry);
-        void execute();
+        MainControlLoop(StateFieldRegistry&);
+        void execute(void);
 };
 
 #endif

@@ -18,9 +18,8 @@ enum SEVERITY{
     ERROR
 };
 
-
-void printf(SEVERITY s, const char* format, ...);
-void println(SEVERITY s, const char* msg);
+void printf(SEVERITY, const char*, ...);
+void println(SEVERITY, const char*);
 
 } // namespace debug
 
