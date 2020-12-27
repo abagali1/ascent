@@ -13,10 +13,12 @@ class ControlTask{
     private:
         StateFieldRegistry& _registry;
     
+    protected:
+        virtual void execute() = 0;
+
     public:
         ControlTask(StateFieldRegistry& r): _registry(r) {};
-        virtual void execute() = 0;
-        virtual ~ControlTask() {};
+        virtual ~ControlTask() = default;
 
         void field_exists(StateFieldBase* s, const std::string& type, const std::string& name){
             if(!s){
