@@ -21,7 +21,8 @@ enum SEVERITY{
 const char* SEVERITY_STRING[3] = {"DEBUG:", "LOG:", "ERROR:"};
 
 void printf(SEVERITY s, const char* format, ...){
-    char buf[100];
+    char buf[106];
+    strncpy(buf, SEVERITY_STRING[s], sizeof(buf));
     va_list args;
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args);
@@ -37,7 +38,10 @@ void println(SEVERITY s, const char* msg){
     #ifdef DESKTOP
         std::cout << SEVERITY_STRING[s] << msg << std::endl;
     #else
-        Serial.println(msg);
+        char buf[sizeof(msg) + 20];
+        strncpy(buf, SEVERITY_STRING[s], sizeof(buf));
+        strncpy(buf, msg, sizeof(buf));
+        Serial.println(buf);
     #endif
 }
 } // namespace debug
