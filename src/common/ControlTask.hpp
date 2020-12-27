@@ -4,12 +4,9 @@
 #include <string>
 #include <cassert>
 
-#include <Arduino.h>
-
-#include <common/StateField.hpp>
-#include <common/debug_console.hpp>
-#include <common/StateFieldRegistry.hpp>
-
+#include "StateField.hpp"
+#include "debug_console.hpp"
+#include "StateFieldRegistry.hpp"
 
 
 class ControlTask{
@@ -19,7 +16,7 @@ class ControlTask{
     public:
         ControlTask(StateFieldRegistry& r): _registry(r) {};
         virtual void execute() = 0;
-        virtual ~ControlTask() = 0;
+        virtual ~ControlTask() = default;
 
         void field_exists(StateFieldBase* s, const std::string& type, const std::string& name){
             if(!s){
@@ -41,12 +38,12 @@ class ControlTask{
 
         template<class T>
         void add_readable_field(ReadableStateField<T>& field){
-            bool added = this._registry.add_readable_field(static_cast<ReadableStateFieldBase*>(&field));
+            bool added = this->_registry.add_readable_field(static_cast<ReadableStateFieldBase*>(&field));
         }
 
         template<class T>
         void add_writeable_field(WriteableStateField<T>& field){
-            bool added = this._registry.add_writeable_field(static_cast<WriteableStateFieldBase*>(&field));
+            bool added = this->_registry.add_writeable_field(static_cast<WriteableStateFieldBase*>(&field));
         }
 
         template<class T>
@@ -56,7 +53,7 @@ class ControlTask{
         }
 
         template<class T>
-        WriteableStateField<T> find_writeable_field(const std::string& name){
+        WriteableStateField<T> find_writeable_field(const char* name){
             auto ptr = this->_registry.find_writeable_field(name);
             return static_cast<WriteableStateField<T>*>(ptr);
         }

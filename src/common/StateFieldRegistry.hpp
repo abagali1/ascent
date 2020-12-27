@@ -13,9 +13,6 @@ class StateFieldRegistry{
         std::vector<ReadableStateFieldBase*> readable_fields;
         std::vector<WriteableStateFieldBase*> writeable_fields;
 
-    public:
-        StateFieldRegistry() = default;
-
         // ACCESSOR METHODS
         ReadableStateFieldBase* find_readable_field(const std::string& name) const;
         WriteableStateFieldBase* find_writeable_field(const std::string& name) const;
@@ -23,6 +20,13 @@ class StateFieldRegistry{
         // SETTER METHODS
         bool add_readable_field(ReadableStateFieldBase* field);
         bool add_writeable_field(WriteableStateFieldBase* field);
+
+        friend class ControlTask;
+
+    public:
+        StateFieldRegistry() = default;
+
+
 
 
 };

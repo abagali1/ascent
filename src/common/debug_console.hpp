@@ -35,7 +35,7 @@ void printf(SEVERITY s, const char* format, ...){
 
 void println(SEVERITY s, const char* msg){
     #ifdef DESKTOP
-        std::cout << SEVERITY_STRING[s] << std::endl;
+        std::cout << SEVERITY_STRING[s] << msg << std::endl;
     #else
         Serial.println(msg);
     #endif
