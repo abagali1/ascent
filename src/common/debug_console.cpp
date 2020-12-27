@@ -2,6 +2,7 @@
 #define _DEBUG_CONSOLE_HPP
 
 #include <cstdarg>
+#include <string>
 
 #ifdef DESKTOP
 #include <iostream>
@@ -21,27 +22,29 @@ enum SEVERITY{
 const char* SEVERITY_STRING[3] = {"DEBUG:", "LOG:", "ERROR:"};
 
 void printf(SEVERITY s, const char* format, ...){
-    char buf[106];
-    strncpy(buf, SEVERITY_STRING[s], sizeof(buf));
+    char buf[100];
     va_list args;
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args);
+
+    std::string sbuf(SEVERITY_STRING[s]);
+    sbuf.append(buf);
+    
     #ifdef DESKTOP
-        std::cout << SEVERITY_STRING[s] << buf;
+        std::cout << sbuf;
     #else
-        Serial.print(buf);
+        Serial.print(sbuf.c_str());
     #endif
     va_end(args);
 }
 
 void println(SEVERITY s, const char* msg){
+    std::string buf(SEVERITY_STRING[s]);
+    buf.append(msg);
     #ifdef DESKTOP
-        std::cout << SEVERITY_STRING[s] << msg << std::endl;
+        std::cout << buf << std::endl;
     #else
-        char buf[sizeof(msg) + 20];
-        strncpy(buf, SEVERITY_STRING[s], sizeof(buf));
-        strncpy(buf, msg, sizeof(buf));
-        Serial.println(buf);
+        Serial.println(buf.c_str());
     #endif
 }
 } // namespace debug
