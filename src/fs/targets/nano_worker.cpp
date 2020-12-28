@@ -1,15 +1,14 @@
-#include <Arduino.h>
 #include <Wire.h>
-#include <vector>
-#include <string>
 
-void receiveEvent(int);
+#define SLAVE_ADDRESS 0x60 // Must be synchronized with Teensy constants
 
-void setup()
-{
-  Wire.begin(4);                // join i2c bus with address #4
-  Wire.onReceive(receiveEvent); // register event
-  Serial.begin(9600);           // start serial for output
+const char x[15] = "hello world";
+
+void setup(){
+  Wire.begin(SLAVE_ADDRESS);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+  Serial.begin(9600);
 }
 
 void loop()
@@ -17,15 +16,23 @@ void loop()
   delay(100);
 }
 
-// function that executes whenever data is received from master
-// this function is registered as an event, see setup()
-void receiveEvent(int howMany)
+void requestEvent() 
 {
-  while(1 < Wire.available()) // loop through all but the last
+  Serial.print("Request from Master. Sending: ");
+  Serial.println(x);
+  Wire.write(x, 15);
+}
+
+void receiveEvent(int bytes){
+  Serial.print("Got ");
+  Serial.println(bytes);
+  char buf[bytes];
+  if(Wire.available() != 0)
   {
-    char c = Wire.read(); // receive byte as a character
-    Serial.print(c);         // print the character
+    for(int i = 0; i< bytes; i++)
+    {
+      buf[i] = (char)Wire.read();
+    }
+  Serial.println(buf);
   }
-  int x = Wire.read();    // receive byte as an integer
-  Serial.println(x);         // print the integer
 }
