@@ -12,7 +12,6 @@ class NanoRadio: public I2CDevice{
         NanoRadio(i2c_t3, uint8_t, uint);
         const std::string read_message();
         void send_message(const std::string&);
-        void reset() override;
 };
 
 #endif

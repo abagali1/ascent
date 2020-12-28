@@ -2,14 +2,13 @@
 
 #include <fs/FCCode/Drivers/NanoRadio.hpp>
 
-NanoRadio r(Wire, 0x60, 13);
+NanoRadio r(Wire, 0x60, 20);
 
 void setup()
-{
+{   
     Serial.begin(9600);
     delay(5000);
     Serial.println("begin");
-    r.reset();
 }
 
 
