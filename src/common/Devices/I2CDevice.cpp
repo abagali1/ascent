@@ -18,15 +18,12 @@ void I2CDevice::_request_from(uint8_t bytes){
     this->Wire.requestFrom(this->address, bytes);
 }
 
-void I2CDevice::read_all(const char* out){
+void I2CDevice::read_all(char* const out){
     this->_request_from(this->max_bytes);
     uint8_t bytes = this->Wire.available();
-    char buf[bytes];
-
     for(int i=0;i<bytes;i++){
-        buf[i] = this->Wire.read();
+        out[i] = (char)this->Wire.read();
     }
-    out = buf;
 }
 
 void I2CDevice::transmit(const char* msg){

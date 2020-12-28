@@ -1,20 +1,23 @@
 #include <Arduino.h>
-#include <i2c_t3.h>
+
+#include <fs/FCCode/Drivers/NanoRadio.hpp>
+#include <common/Devices/I2CDevice.hpp>
+
+NanoRadio r(Wire, 0x60);
 
 void setup()
 {
-    Wire1.begin(); // join i2c bus (address optional for master)
+    Serial.begin(9600);
+    delay(5000);
+    Serial.println("begin");
 }
 
-byte x = 0;
 
 void loop()
 {
-    Wire1.beginTransmission(4); // transmit to device #4
-    Wire1.write("x is ");        // sends five bytes
-    Wire1.write(x);              // sends one byte  
-    Wire1.endTransmission();    // stop transmitting
+    Serial.println("Receiving");
+    Serial.println(r.read_message().c_str());
 
-    x++;
-    delay(500);
+    r.send_message("hello duino");
+    delay(100);
 }
