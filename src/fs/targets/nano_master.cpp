@@ -1,15 +1,15 @@
 #include <Arduino.h>
 
 #include <fs/FCCode/Drivers/NanoRadio.hpp>
-#include <common/Devices/I2CDevice.hpp>
 
-NanoRadio r(Wire, 0x60);
+NanoRadio r(Wire, 0x60, 13);
 
 void setup()
 {
     Serial.begin(9600);
     delay(5000);
     Serial.println("begin");
+    r.reset();
 }
 
 
@@ -19,5 +19,5 @@ void loop()
     Serial.println(r.read_message().c_str());
 
     r.send_message("hello duino");
-    delay(100);
+    delay(1000);
 }
