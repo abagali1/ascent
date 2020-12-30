@@ -7,5 +7,4 @@
 
 
 int main(int argv, char* argc[]){
-    debug::printf(debug::DEBUG, "%d info",5);
 }
