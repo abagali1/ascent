@@ -18,6 +18,9 @@ namespace DEVICES{
     constexpr uint8_t bno055_id = 55;
     constexpr uint8_t bno055_address = 0x28;
 
+    constexpr uint bmp388_offset = 2;
+    constexpr uint8_t bmp388_address = 0x77;
+
     constexpr uint8_t nano_address = 0x60; // Must be synchronized on the nano
 }
 
