@@ -1,1 +1,3 @@
 groundstation/* linguist-vendored
+*.mat linguist-language=matlab
+*.slx linguist-language=matlab
