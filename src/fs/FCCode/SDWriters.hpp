@@ -2,6 +2,7 @@
 #define _SD_WRITER_HPP
 
 #include <SD.h>
+#include <lin.hpp>
 
 #include <string>
 
@@ -21,8 +22,12 @@ class SDWriter: public TimedControlTask {
         static constexpr int sd_chip = BUILTIN_SDCARD;
 
         // Retrieved Fields
-    
+        ReadableStateField<lin::Vector3f>
+                                *euler_f,
+                                *lin_acc_f,
+                                *angular_vel_f;
 
+        ReadableStateField<float> *altitude_f;
 };
 
 #endif

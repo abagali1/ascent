@@ -20,7 +20,7 @@ class IMUMonitor: public TimedControlTask{
                         accel_cal_f,
                         mag_cal_f;
                         
-        ReadableStateField<lin::Vector3d>
+        ReadableStateField<lin::Vector3f>
                         euler_f,
                         angular_vel_f,
                         acc_grav_vec_f,
@@ -30,7 +30,7 @@ class IMUMonitor: public TimedControlTask{
 
         ReadableStateField<int8_t> temp_f;
 
-        ReadableStateField<lin::Vector4d> quat_f;
+        ReadableStateField<lin::Vector4f> quat_f;
     public:
         IMUMonitor(StateFieldRegistry&, uint, uint, int);
         void execute(void) override;

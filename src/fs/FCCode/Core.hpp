@@ -44,11 +44,11 @@ class Core: public TimedControlTask{
                                  servo_on_f;
 
         // Retrieved Fields
-        ReadableStateField<unsigned char>* system_cal;
-        ReadableStateField<unsigned char>* gyro_cal;
-        ReadableStateField<unsigned char>* accel_cal;
-        ReadableStateField<unsigned char>* mag_cal;
-
+        ReadableStateField<unsigned char> 
+                                *system_cal,
+                                *gyro_cal,
+                                *accel_cal,
+                                *mag_cal;
 
 };
 
