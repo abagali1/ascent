@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <br/>
     <div class="row lshift">
       <div class="col-lg-3" :class="{'text-right': isRTL}">
         <card type="chart" class="shrink">
@@ -18,6 +18,7 @@
             </line-chart>
           </div>
         </card>
+        <br/>
         <card type="chart" class="shrink" style="margin-top: -1em;">
           <template slot="header">
             <h3 class="card-title">Estimated Velocity z (ms^-1)</h3>
@@ -33,20 +34,10 @@
             </line-chart>
           </div>
         </card>
-        <card type="chart" class="shrink" style="margin-top: -1em;">
+        <card type="chart" class="shrink" style="height:4em;">
           <template slot="header">
-            <h3 class="card-title">Acceleration z (ms^-2)</h3>
-            <h5 class="card-category">Current Acceleration - 0.23 ms^-2</h5>
+            <h3 class="card-title"><b>Mission Mode: <span style="color:#fd4d92;"> Ascent </span></b></h3>
           </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="purple-line-chart"
-                        :chart-data="purpleLineChart.chartData"
-                        :gradient-colors="purpleLineChart.gradientColors"
-                        :gradient-stops="purpleLineChart.gradientStops"
-                        :extra-options="purpleLineChart.extraOptions">
-            </line-chart>
-          </div>
         </card>
       </div>
       <div class="col-lg-3" :class="{'text-right': isRTL}">
@@ -63,6 +54,33 @@
                         :gradient-stops="purpleLineChart.gradientStops"
                         :extra-options="purpleLineChart.extraOptions">
             </line-chart>
+          </div>
+        </card>
+        <div style="height:0.6em;"></div>
+        <!-- TODO: change set point -->
+        <card type="chart" class="shrink" style="background-color:#00b842; text-align:center;height:5em;">
+          <template slot="header">
+            <h3 class="card-title" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;">
+              Launch</h3>
+          </template>
+        </card>
+        <card type="chart" class="shrink" style="background-color:#fd4d92; text-align:center;height:5em;">
+          <template slot="header">
+            <h3 class="card-title" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;">
+              Abort</h3>
+          </template>
+        </card>
+
+        <card type="chart" class="shrink" style="height:14em;">
+          <template slot="header">
+            <h3 class="card-title">Calibrate Gimbal</h3>
+          </template>
+          <div style="margin-left:20px;">
+          <button type="button" class="btn btn-primary" style="width:45%;">- Pitch</button>
+          <button type="button" class="btn btn-primary" style="width:45%;">+ Pitch</button>
+          <br/>
+          <button type="button" class="btn btn-secondary" style="width:45%;">- Yaw</button>
+          <button type="button" class="btn btn-secondary" style="width:45%;">+ Yaw</button>
           </div>
         </card>
       </div>
@@ -82,6 +100,7 @@
             </line-chart>
           </div>
         </card>
+        <br/>
       </div>
       <div class="col-lg-3" :class="{'text-right': isRTL}">
         <card type="chart" class="shrink">
@@ -160,7 +179,7 @@
           },
           gradientColors: config.colors.primaryGradient,
           gradientStops: [1, 0.2, 0],
-        },
+        }, 
         greenLineChart: {
           extraOptions: chartConfigs.greenChartOptions,
           chartData: {
@@ -261,16 +280,7 @@
     trigger_launch() {
 
     },
-    abort_ground() {
-
-    },
-    abort_flight() {
-
-    },
-    calibrate_imu() {
-
-    },
-    calibrate_altimeter() {
+    abort() {
 
     },
     mounted() {
