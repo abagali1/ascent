@@ -6,11 +6,9 @@
 
 void setup(){
     StateFieldRegistry sfr;
-    ReadableStateField<int> r("r");
     MainControlLoop mcl(sfr);
 
-    // mcl.execute();
-
+    mcl.execute();
 }
 
 void loop(){}

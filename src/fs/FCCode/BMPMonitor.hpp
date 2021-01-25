@@ -30,7 +30,7 @@ class BMPMonitor: public TimedControlTask{
     public:
         static constexpr float sealevel_hpa = 1013.25;
         BMPMonitor(StateFieldRegistry&, uint, uint);
-        void execute(void);
+        void execute(void) override;
 };
 
 
