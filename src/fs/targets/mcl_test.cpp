@@ -5,10 +5,16 @@
 #include <wiring.h>
 
 void setup(){
+    Serial.begin(9600);
+    delay(2000);
     StateFieldRegistry sfr;
     MainControlLoop mcl(sfr);
 
-    mcl.execute();
+    debug::println(debug::DEBUG, "start");
+    for(int i=0;;i++)
+        mcl.execute();
+    mcl.finish();
+    debug::println(debug::DEBUG, "fin");
 }
 
 void loop(){}

@@ -10,11 +10,12 @@
 
 class SDWriter: public TimedControlTask {
     public:
-        SDWriter(StateFieldRegistry&, uint, std::string&);
+        SDWriter(StateFieldRegistry&, uint, const std::string&);
         void execute(void) override;
+        void close(void);
     private:
-        const std::string& _filename;
         File fout;
+        const std::string& _filename;
 
         ReadableStateField<bool> functional_f;
         ReadableStateField<bool> write_success_f;

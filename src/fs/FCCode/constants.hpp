@@ -21,6 +21,8 @@ namespace DEVICES{
     constexpr uint bmp388_offset = 2;
     constexpr uint8_t bmp388_address = 0x77;
 
+    constexpr uint sd_offset = 3;
+
     constexpr uint8_t nano_address = 0x60; // Must be synchronized on the nano
 }
 
