@@ -58,6 +58,12 @@
         </card>
         <div style="height:0.6em;"></div>
         <!-- TODO: change set point -->
+        <card type="chart" class="shrink" style="background-color:#fd924d; text-align:center;height:5em;">
+          <template slot="header">
+            <h3 class="card-title" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;">
+              Start Auto Calibration</h3>
+          </template>
+        </card>
         <card type="chart" class="shrink" style="background-color:#00b842; text-align:center;height:5em;">
           <template slot="header">
             <h3 class="card-title" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;">
