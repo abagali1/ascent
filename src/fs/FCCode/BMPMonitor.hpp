@@ -20,7 +20,11 @@ class BMPMonitor: public TimedControlTask{
         ReadableStateField<float> 
                         temp_f,
                         pressure_f,
-                        altitude_f;
+                        altitude_f,
+                        distance_f;
+
+        ReadableStateField<float>
+                        *init_height_f;
 
         static constexpr uint8_t temp_oversampling = BMP3_OVERSAMPLING_2X;
         static constexpr uint8_t pressure_oversampling = BMP3_OVERSAMPLING_8X;

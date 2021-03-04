@@ -41,8 +41,13 @@ class Core: public TimedControlTask{
         // Initialization Fields
         ReadableStateField<lin::Vector4d> init_quat_f;
         ReadableStateField<lin::Vector3f> acc_error_f;
+        ReadableStateField<float> init_height_f;
 
-        ReadableStateField<float> ground_level_f;
+        ReadableStateField<uint> init_readings_f;
+
+        ReadableStateField<float> init_height_sums_f;
+        ReadableStateField<lin::Vector4f> init_quat_sum_f;
+        ReadableStateField<lin::Vector3f> init_acc_error_sum_f;
 
         // Retrieved Fields
         ReadableStateField<unsigned char> 
@@ -50,11 +55,22 @@ class Core: public TimedControlTask{
                                 *gyro_cal,
                                 *accel_cal,
                                 *mag_cal;
+        
         ReadableStateField<uint>
                                 *control_cycle_count_f;
+        
+        ReadableStateField<float>
+                                *altitude_f;
+
         ReadableStateField<bool>
                                 *imu_functional_f,
                                 *altimeter_functional_f;
+
+        ReadableStateField<lin::Vector3f>
+                                *imu_lin_acc_f;
+
+        ReadableStateField<lin::Vector4f>
+                                *imu_quat_f;
 
 };
 
