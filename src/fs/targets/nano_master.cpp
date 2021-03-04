@@ -1,22 +1,19 @@
 #include <Arduino.h>
 
-#include <fs/FCCode/Drivers/NanoRadio.hpp>
-
-NanoRadio r(Wire, 0x60, 20);
-
 void setup()
 {   
     Serial.begin(9600);
+    Serial4.begin(9600);
     delay(5000);
     Serial.println("begin");
+    Serial4.println("hello");
 }
 
 
 void loop()
-{
-    Serial.println("Receiving");
-    Serial.println(r.read_message().c_str());
-
-    r.send_message("hello duino");
+{   
+    String in = Serial.readStringUntil('\n');
+    if(in)
+        Serial4.println(in);
     delay(1000);
 }

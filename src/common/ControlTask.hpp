@@ -58,7 +58,7 @@ class ControlTask{
         }
 
         template<class T>
-        WriteableStateField<T> find_writeable_field(const char* name){
+        WriteableStateField<T>* find_writeable_field(const char* name){
             auto ptr = this->_registry.find_writeable_field(name);
             field_exists(ptr, "writeable", name);
             return static_cast<WriteableStateField<T>*>(ptr);
