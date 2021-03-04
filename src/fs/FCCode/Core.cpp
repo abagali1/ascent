@@ -9,13 +9,19 @@ Core::Core(StateFieldRegistry& registry, uint offset)
         mission_mode_f("core.mision_mode"),
         init_quat_f("core.init_quat"),
         acc_error_f("core.acc_error"),
-        ground_level_f("core.ground_level")
+        init_height_f("core.init_height"),
+        init_readings_f("core.init_readings"),
+        init_height_sums_f("core.init_height_sum"),
+        init_quat_sum_f("core.init_quat_sum"),
+        init_acc_error_sum_f("core.init_acc_error_sum")
 {
     
     this->add_writeable_field(this->mission_mode_f);
     this->add_readable_field(this->init_quat_f);
     this->add_readable_field(this->acc_error_f);
-    this->add_readable_field(this->ground_level_f);
+    this->add_readable_field(this->init_readings_f);
+    this->add_readable_field(this->init_height_sums_f);
+    this->add_readable_field(this->init_height_f);
 
     this->system_cal = this->find_readable_field<unsigned char>("imu.system_cal");
     this->gyro_cal = this->find_readable_field<unsigned char>("imu.gyro_cal");
@@ -23,8 +29,15 @@ Core::Core(StateFieldRegistry& registry, uint offset)
     this->mag_cal = this->find_readable_field<unsigned char>("imu.mag_cal");
     this->control_cycle_count_f = this->find_readable_field<uint>("control_cycle_count");
     this->imu_functional_f = this->find_readable_field<bool>("imu.functional");
-    this->altimeter_functional_f = this-> find_readable_field<bool>("bmp.functional");
-    
+    this->altimeter_functional_f = this->find_readable_field<bool>("bmp.functional");
+    this->altitude_f = this->find_readable_field<float>("bmp.altitude");
+    this->imu_lin_acc_f = this->find_readable_field<lin::Vector3f>("imu.lin_accel");
+    this->imu_quat_f = this->find_readable_field<lin::Vector4f>("imu.quat");
+
+    this->mission_mode_f.set_value(static_cast<unsigned char>(HARDWARE_INIT));
+    this->init_height_f.set_value(-1.0);
+    this->init_quat_f.set_value({-1.0, -1.0, -1.0, -1.0});
+    this->acc_error_f.set_value({-1.0, -1.0, -1.0});
 };
 
 
@@ -58,20 +71,13 @@ void Core::dispatch_hardware_init() {
         dispatch_emergency();
     }
 
-    uint period = 10;
-    uint init_period = 20; 
-
-    if (control_cycle_count_f->get_value() * period > init_period) {
+    if (control_cycle_count_f->get_value() >= MANAGER::init_cycles) {
         dispatch_manual_calibration();
     }
 }
 
 void Core::dispatch_manual_calibration() {
     mission_mode_f.set_value(static_cast<unsigned char>(MANUAL_CAL));
-
-    if (enter_emergency()) {
-        dispatch_emergency();
-    }
 
     bool uplink_says_to_go_to_automatic = true;
     if (uplink_says_to_go_to_automatic) {
@@ -83,15 +89,26 @@ void Core::dispatch_manual_calibration() {
 void Core::dispatch_automatic_calibration() {
     mission_mode_f.set_value(static_cast<unsigned char>(AUTO_CAL));
 
-    if (enter_emergency()) {
-        dispatch_emergency();
-    }
-
-    bool cond = true;  // when initial height, acceleration error, and starting quaternion fields have been filled
-
-    if (cond) {
+    bool exit_condition = init_height_f.get_value() != -1.0; 
+    exit_condition &= init_quat_f.get_value()(0) != -1.0 && init_quat_f.get_value()(1) != -1.0 && init_quat_f.get_value()(2) != -1.0 && init_quat_f.get_value()(3) != -1.0;
+    exit_condition &= acc_error_f.get_value()(0) != -1.0 && acc_error_f.get_value()(1) != -1.0 && acc_error_f.get_value()(2) != -1.0;
+    
+    if (exit_condition) {
         dispatch_standby();
     }
+
+    init_height_sums_f.set_value(init_height_sums_f.get_value() + altitude_f->get_value());
+    init_quat_sum_f.set_value(init_quat_sum_f.get_value() + imu_quat_f->get_value());
+    init_acc_error_sum_f.set_value(init_acc_error_sum_f.get_value() + imu_lin_acc_f->get_value());
+
+    init_readings_f.set_value(init_readings_f.get_value() + 1);
+
+    if (init_readings_f.get_value() >= MANAGER::init_readings) {
+        init_height_f.set_value(init_height_sums_f.get_value() / init_readings_f.get_value());
+        init_quat_f.set_value(init_quat_sum_f.get_value() / init_readings_f.get_value());
+        acc_error_f.set_value(init_acc_error_sum_f.get_value() / init_readings_f.get_value());   
+    }
+
 }
 
 void Core::dispatch_standby() {
@@ -141,11 +158,11 @@ void Core::dispatch_touch_down() {
 
 bool Core::enter_emergency() {
     bool uplink_says_to_abort = false;
-    bool hardware_failure = !imu_functional_f->get_value() || !altimeter_functional_f->get_value();
+    // bool hardware_failure = !imu_functional_f->get_value() || !altimeter_functional_f->get_value();
     bool lost_control = std::abs(0) > MANAGER::max_pitch || std::abs(0) > MANAGER::max_yaw;
 
 
-    if (uplink_says_to_abort || hardware_failure || lost_control) {
+    if (uplink_says_to_abort || lost_control) {
         return true;
     }
 
