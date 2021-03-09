@@ -13,7 +13,7 @@ class DownlinkProducer: public TimedControlTask {
         void execute(void) override;
     
     private:
-        HardwareSerial serial_out = DEVICES:radio_out;
+        HardwareSerial serial_out = DEVICES::radio_out;
         ReadableStateField<uint> *control_cycle_f;
         WriteableStateField<unsigned char> *mission_mode_f;
 
