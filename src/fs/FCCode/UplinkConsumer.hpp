@@ -12,7 +12,7 @@ class UplinkConsumer: public TimedControlTask{
         void execute(void) override;
 
     private:
-        HardwareSerial serial_out = DEVICES::RADIO_OUT::serial;
+        HardwareSerial serial_in = DEVICES::RADIO_OUT::serial;
         unsigned int baud = DEVICES::RADIO_OUT::baud;
 
         WriteableStateField<unsigned char> *mission_mode_f;
