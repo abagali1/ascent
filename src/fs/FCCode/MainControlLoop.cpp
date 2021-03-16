@@ -23,7 +23,8 @@ void MainControlLoop::execute(){
     }
 
     { // ACTUATE TASKS
-        this->sd_writer.execute_on_time();
+        // this->sd_writer.execute_on_time();
+        this->downlink_producer.execute_on_time();
     }
 }
 

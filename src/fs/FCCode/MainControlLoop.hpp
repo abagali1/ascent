@@ -4,6 +4,7 @@
 #include "ClockManager.hpp"
 #include "IMUMonitor.hpp"
 #include "BMPMonitor.hpp"
+#include "DownlinkProducer.hpp"
 #include "SDWriters.hpp"
 
 class MainControlLoop: public ControlTask{
@@ -11,6 +12,7 @@ class MainControlLoop: public ControlTask{
         ClockManager clock_manager;
         IMUMonitor imu_monitor;
         // BMPMonitor bmp_monitor;
+        DownlinkProducer downlink_producer;
         SDWriter sd_writer;
     public:
         MainControlLoop(StateFieldRegistry&);

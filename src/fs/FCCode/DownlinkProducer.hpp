@@ -1,6 +1,9 @@
 #ifndef _DOWNLINK_HPP
 #define _DOWNLINK_HPP
 
+#include <iomanip>
+#include <iostream>
+
 #include <lin.hpp>
 
 #include <common/TimedControlTask.hpp>
@@ -13,12 +16,13 @@ class DownlinkProducer: public TimedControlTask {
         void execute(void) override;
     
     private:
-        HardwareSerial serial_out = DEVICES:radio_out;
+        HardwareSerial serial_out = DEVICES::radio_out;
         ReadableStateField<uint> *control_cycle_f;
         WriteableStateField<unsigned char> *mission_mode_f;
 
-        // ReadableStateField<lin::Vector3f> *world_euler_f;
+        ReadableStateField<lin::Vector3f> *lin_accel_f;
         // ReadableStateField<lin::Vector4d> *world_quat_f;
+        // ReadableStateField<lin::Vector3f> *world_euler_f;
 
         ReadableStateField<float> *altitude_f;
 
@@ -35,6 +39,6 @@ class DownlinkProducer: public TimedControlTask {
 
 
 
-}
+};
 
 #endif
