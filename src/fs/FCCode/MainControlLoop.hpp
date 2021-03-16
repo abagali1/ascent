@@ -13,11 +13,10 @@ class MainControlLoop: public ControlTask{
         IMUMonitor imu_monitor;
         // BMPMonitor bmp_monitor;
         DownlinkProducer downlink_producer;
-        SDWriter sd_writer;
+        // SDWriter sd_writer;
     public:
         MainControlLoop(StateFieldRegistry&);
         void execute(void) override;
-        void finish(void);
 };
 
 #endif
