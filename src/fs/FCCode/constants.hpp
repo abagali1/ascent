@@ -24,9 +24,12 @@ namespace DEVICES {
     constexpr uint sd_offset = 3;
 
     constexpr uint dl_offset = 4;
-    
-    HardwareSerial radio_out = Serial4;
-    constexpr uint radio_max_buf = 32;
+
+    namespace RADIO_OUT{
+        const HardwareSerial serial = Serial4;
+        constexpr unsigned int baud = 9600;
+        constexpr unsigned int max_buf = 32;
+    } 
 
     constexpr uint8_t nano_address = 0x60; // Must be synchronized on the nano
 }

@@ -5,8 +5,8 @@ MainControlLoop::MainControlLoop(StateFieldRegistry& registry)
     :   ControlTask(registry),
         clock_manager(registry, ASCENT::control_cycle_time),
         imu_monitor(registry, DEVICES::bno055_offset, DEVICES::bno055_id, DEVICES::bno055_address),
+        downlink_producer(registry, DEVICES::dl_offset)
         // bmp_monitor(registry, DEVICES::bmp388_offset, DEVICES::bmp388_address)
-        sd_writer(registry, DEVICES::sd_offset, "dataaaaa.txt")
     {
     }
 
@@ -23,11 +23,7 @@ void MainControlLoop::execute(){
     }
 
     { // ACTUATE TASKS
-        this->sd_writer.execute_on_time();
+        // this->sd_writer.execute_on_time();
+        this->downlink_producer.execute_on_time();
     }
-}
-
-
-void MainControlLoop::finish(){
-    this->sd_writer.close();
 }

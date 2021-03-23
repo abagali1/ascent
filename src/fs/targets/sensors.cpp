@@ -5,27 +5,15 @@
 #include <utility/imumaths.h>
 #include <string>
 
- #include <common/StateFieldRegistry.hpp>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-Adafruit_BMP3XX bmp; // I2C
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 void setup() {
-  std::string a;
   Wire.begin(); 
   Serial.begin(9600);
   while (!Serial);
-  
-  Serial.println("BMP388 test");
-  if (!bmp.begin_I2C()) {
-    Serial.println("Could not find a valid BMP3 sensor, check wiring!");
-    while (1);
-  }
-  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   
   Serial.println("Orientation Sensor Test"); Serial.println("");
   if(!bno.begin())
@@ -35,24 +23,18 @@ void setup() {
   }
   delay(1000);  
   bno.setExtCrystalUse(true);
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
   Serial.println("teensy started");
 }
 
 void loop() {
-  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  String bno_string = "bno: " + String(euler.x()) + "," + String(euler.y()) +","+ String(euler.z());
+  unsigned char sys_c, gyro_c, accel_c, mag_c;
 
-  
-  if (! bmp.performReading()) {
-    Serial.println("Failed to perform reading :(");
-    return;
-  }
-  String bmp_string = "bmp: " + String(bmp.temperature)+"*C, "+String(bmp.pressure/100.0)+" hPa, "+bmp.readAltitude(SEALEVELPRESSURE_HPA)+" m";
-  String sender = bno_string +"; "+ bmp_string;
-  char buf[sender.length()];
-  sender.toCharArray(buf, sender.length());
+  bno.getCalibration(&sys_c, &gyro_c, &accel_c, &mag_c);
+  imu::Quaternion quat = bno.getQuat();
+
+  char buf[60];
+  snprintf(buf, 60, "%d;%d;%d;%d;%0.3lf;%0.3lf;%0.3lf;%0.3lf", sys_c, gyro_c, accel_c, mag_c, quat.w(), quat.x(), quat.y(), quat.z());
   Serial.println(buf);
+  
   delay(500);
 }
