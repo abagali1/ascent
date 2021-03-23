@@ -9,7 +9,7 @@
 
 #include <common/TimedControlTask.hpp>
 
-class IMUMonitor: public TimedControlTask{
+class IMUMonitor: public TimedControlTask {
     private:
         Adafruit_BNO055 bno055;
         ReadableStateField<bool> functional_f;

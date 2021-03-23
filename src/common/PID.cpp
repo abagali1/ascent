@@ -17,6 +17,10 @@ PID::PID(float kp, float ki, float kd, float sp, float upper_limit, float lower_
     this->clamp = false;
 }
 
+void PID::change_setpoint(float sp) {
+    this->set_point = sp;
+}
+
 float PID::execute(float process_value) {
 
     float error = set_point - process_value;

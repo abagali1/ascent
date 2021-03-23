@@ -45,4 +45,30 @@ namespace MANAGER {
     constexpr float max_yaw = 15;
 }
 
+namespace GNC {
+
+    // y = mx + b where x = is the motor speed and y = thrust
+    constexpr float m = 3;
+    constexpr float b = 2;
+
+    constexpr float min_torque_force = 0;
+    constexpr float max_torque_force = 0;
+
+    constexpr float min_z_force = 0;
+    constexpr float max_z_force = 0;
+
+    constexpr float yaw_kP = 0;
+    constexpr float yaw_kI = 0;
+    constexpr float yaw_kD = 0;
+
+    constexpr float pitch_kP = 0;
+    constexpr float pitch_kI = 0;
+    constexpr float pitch_kD = 0;
+
+    constexpr float z_kP = 0;
+    constexpr float z_kI = 0;
+    constexpr float z_kD = 0;
+
+}
+
 #endif

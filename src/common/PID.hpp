@@ -17,6 +17,7 @@ class PID {
 
     public:
         PID(float, float, float, float, float, float, float);
+        void change_setpoint(float);
         float execute(float);
 };
 
