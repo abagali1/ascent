@@ -11,6 +11,7 @@ class UplinkConsumer: public TimedControlTask{
     public:
         UplinkConsumer(StateFieldRegistry&, uint);
         void execute(void) override;
+        void invalid_message(void);
 
     private:
         HardwareSerial serial_in = DEVICES::RADIO_OUT::serial;

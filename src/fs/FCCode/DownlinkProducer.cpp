@@ -38,6 +38,6 @@ void DownlinkProducer::execute(){
     msg_stream << ";";
 
     const std::string final_msg = msg_stream.str();
-    for(int i=0;i<final_msg.length(); i++)
+    for(int i=0;i<(int)final_msg.length(); i++)
         this->serial_out.print(final_msg.substr(i, DEVICES::RADIO_OUT::max_buf).c_str());
 }
