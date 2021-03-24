@@ -1,6 +1,7 @@
 #ifndef _UPLINK_CONSUMER_HPP
 #define _UPLINK_CONSUMER_HPP
 
+#include <sstream>
 
 #include <common/TimedControlTask.hpp>
 

@@ -34,7 +34,7 @@ Core::Core(StateFieldRegistry& registry, uint offset)
     this->imu_lin_acc_f = this->find_readable_field<lin::Vector3f>("imu.lin_accel");
     this->imu_quat_f = this->find_readable_field<lin::Vector4f>("imu.quat");
 
-    this->mission_mode_f.set_value(static_cast<unsigned char>(HARDWARE_INIT));
+    this->mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::HARDWARE_INIT));
     this->init_height_f.set_value(-1.0);
     this->init_quat_f.set_value({-1.0, -1.0, -1.0, -1.0});
     this->acc_error_f.set_value({-1.0, -1.0, -1.0});
@@ -42,22 +42,22 @@ Core::Core(StateFieldRegistry& registry, uint offset)
 
 
 void Core::execute() {
-    switch (static_cast<mission_mode_t>(mission_mode_f.get_value())) {
-    case HARDWARE_INIT:
+    switch (static_cast<ASCENT::mission_mode_t>(mission_mode_f.get_value())) {
+    case ASCENT::HARDWARE_INIT:
         dispatch_hardware_init();
-    case MANUAL_CAL:
+    case ASCENT::MANUAL_CAL:
         dispatch_manual_calibration();
-    case AUTO_CAL:
+    case ASCENT::AUTO_CAL:
         dispatch_automatic_calibration();
-    case STANDBY:
+    case ASCENT::STANDBY:
         dispatch_standby();
-    case ASCEND:
+    case ASCENT::ASCEND:
         dispatch_ascend();
-    case DESCENT:
+    case ASCENT::DESCENT:
         dispatch_descent();
-    case TOUCH_DOWN:
+    case ASCENT::TOUCH_DOWN:
         dispatch_touch_down();
-    case EMERGENCY:
+    case ASCENT::EMERGENCY:
         dispatch_emergency();
     default:
         break;
@@ -65,7 +65,7 @@ void Core::execute() {
 }
 
 void Core::dispatch_hardware_init() {
-    mission_mode_f.set_value(static_cast<unsigned char>(HARDWARE_INIT));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::HARDWARE_INIT));
 
     if (enter_emergency()) {
         dispatch_emergency();
@@ -77,7 +77,7 @@ void Core::dispatch_hardware_init() {
 }
 
 void Core::dispatch_manual_calibration() {
-    mission_mode_f.set_value(static_cast<unsigned char>(MANUAL_CAL));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::MANUAL_CAL));
 
     bool uplink_says_to_go_to_automatic = true;
     if (uplink_says_to_go_to_automatic) {
@@ -87,7 +87,7 @@ void Core::dispatch_manual_calibration() {
 }
 
 void Core::dispatch_automatic_calibration() {
-    mission_mode_f.set_value(static_cast<unsigned char>(AUTO_CAL));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::AUTO_CAL));
 
     bool exit_condition = init_height_f.get_value() != -1.0; 
     exit_condition &= init_quat_f.get_value()(0) != -1.0 && init_quat_f.get_value()(1) != -1.0 && init_quat_f.get_value()(2) != -1.0 && init_quat_f.get_value()(3) != -1.0;
@@ -112,7 +112,7 @@ void Core::dispatch_automatic_calibration() {
 }
 
 void Core::dispatch_standby() {
-    mission_mode_f.set_value(static_cast<unsigned char>(STANDBY));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::STANDBY));
 
     if (enter_emergency()) {
         dispatch_emergency();
@@ -125,7 +125,7 @@ void Core::dispatch_standby() {
 }
 
 void Core::dispatch_ascend() {
-    mission_mode_f.set_value(static_cast<unsigned char>(ASCEND));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::ASCEND));
 
     if (enter_emergency()) {
         dispatch_emergency();
@@ -139,7 +139,7 @@ void Core::dispatch_ascend() {
 }
 
 void Core::dispatch_descent() {
-    mission_mode_f.set_value(static_cast<unsigned char>(DESCENT));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::DESCENT));
 
     if (enter_emergency()) {
         dispatch_emergency();
@@ -153,7 +153,7 @@ void Core::dispatch_descent() {
 }
 
 void Core::dispatch_touch_down() {
-    mission_mode_f.set_value(static_cast<unsigned char>(TOUCH_DOWN));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::TOUCH_DOWN));
 }
 
 bool Core::enter_emergency() {
@@ -170,5 +170,5 @@ bool Core::enter_emergency() {
 }
 
 void Core::dispatch_emergency() {
-    mission_mode_f.set_value(static_cast<unsigned char>(EMERGENCY));
+    mission_mode_f.set_value(static_cast<unsigned char>(ASCENT::EMERGENCY));
 }

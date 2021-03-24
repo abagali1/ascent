@@ -9,6 +9,17 @@ namespace ASCENT {
     constexpr uint control_cycle_time_ms = control_cycle_time_s * 1000;
     constexpr uint control_cycle_time_us = control_cycle_time_ms * 1000;
     constexpr uint control_cycle_time = control_cycle_time_us;
+
+    enum mission_mode_t {
+        HARDWARE_INIT, // start imu + bn0 + motor
+        MANUAL_CAL, // fix imu calibration if needed + realign servos
+        AUTO_CAL, // find starting height + starting quat + acc error
+        STANDBY, // wait for gs
+        ASCEND, // go up
+        DESCENT, // go down
+        TOUCH_DOWN, // landed procedure
+        EMERGENCY // turn everything off :(
+    };
 }
 
 namespace DEVICES {

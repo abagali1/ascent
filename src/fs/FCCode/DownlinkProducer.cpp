@@ -20,7 +20,7 @@ void DownlinkProducer::execute(){
     // lin::Vector2f servo = this->servo_orientation_f->get_value();
 
     std::ostringstream msg_stream;
-    msg_stream << std::setprecision(4);
+    msg_stream << std::fixed << std::setprecision(4);
     msg_stream << this->control_cycle_f->get_value() << ";";
     msg_stream << static_cast<uint>(this->mission_mode_f->get_value()) << ";";
     msg_stream << linaccel(0) << ";" << linaccel(1) << ";" << linaccel(2) << ";";
@@ -37,9 +37,7 @@ void DownlinkProducer::execute(){
 
     msg_stream << ";";
 
-
-    const std::string &final_msg = msg_stream.str();
-
-    Serial.println(final_msg.c_str());
-    Serial.println(final_msg.length());
+    const std::string final_msg = msg_stream.str();
+    for(int i=0;i<final_msg.length(); i++)
+        this->serial_out.print(final_msg.substr(i, DEVICES::RADIO_OUT::max_buf).c_str());
 }

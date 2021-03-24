@@ -11,6 +11,13 @@ UplinkConsumer::UplinkConsumer(StateFieldRegistry &registry, uint offset)
     // this->servo_calib_y = this->find_writeable_field<int>("servo.calib_y");
 }
 
-
-void execute(){
+void UplinkConsumer::execute(void){
+    std::istringstream recv(this->serial_in.readStringUntil('\n').c_str());
+    std::string s;
+    std::string msg[3];
+    int i = 0;
+    while(std::getline(recv, s, ';')){
+        msg[i] = s;
+        i++;
+    }
 }

@@ -5,23 +5,14 @@
 
 #include <lin.hpp>
 
-enum mission_mode_t {
-    HARDWARE_INIT, // start imu + bn0 + motor
-    MANUAL_CAL, // fix imu calibration if needed + realign servos
-    AUTO_CAL, // find starting height + starting quat + acc error
-    STANDBY, // wait for gs
-    ASCEND, // go up
-    DESCENT, // go down
-    TOUCH_DOWN, // landed procedure
-    EMERGENCY // turn everything off :(
-};
+#include "constants.hpp"
 
 class Core: public TimedControlTask{
     public:
         Core(StateFieldRegistry&, uint);
         void execute(void) override;
     protected:
-        void set_mode(mission_mode_t);
+        void set_mode(ASCENT::mission_mode_t);
         
         void dispatch_hardware_init(void);
         void dispatch_manual_calibration(void);
